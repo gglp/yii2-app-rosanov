@@ -1,0 +1,49 @@
+<?php
+
+namespace frontend\models;
+
+use Yii;
+
+/**
+ * This is the model class for table "{{%work}}".
+ *
+ * @property integer $id
+ * @property string $title
+ * @property string $filename
+ * @property string $comment
+ */
+class Work extends \yii\db\ActiveRecord
+{
+    /**
+     * @inheritdoc
+     */
+    public static function tableName()
+    {
+        return '{{%work}}';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            [['title', 'filename'], 'required'],
+            [['comment'], 'string'],
+            [['title', 'filename'], 'string', 'max' => 255]
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'title' => 'Название',
+            'filename' => 'Название файла',
+            'comment' => 'Комментарий',
+        ];
+    }
+}
