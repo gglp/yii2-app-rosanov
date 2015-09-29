@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'itemOptions' => ['class' => 'item'],
         'itemView' => function ($model, $key, $index, $widget) {
-            $file = str_replace('/', '\\', Yii::getAlias('@frontend').'\web\media\books\\'.$model->filename);
+            $file = Yii::getAlias('@frontend/web/media/books/').$model->filename;
             $parser = new \cebe\markdown\GithubMarkdown();
             $result = '<div>'.$parser->parse(file_get_contents($file)).'</div>';
             return $result;

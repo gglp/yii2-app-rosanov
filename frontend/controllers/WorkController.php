@@ -5,8 +5,10 @@ namespace frontend\controllers;
 use Yii;
 use frontend\models\Work;
 use frontend\models\WorkSearch;
+use frontend\models\WorkFile;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
 use yii\filters\VerbFilter;
 
 /**
@@ -20,7 +22,7 @@ class WorkController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['post'],
+                    //'delete' => ['post'],
                 ],
             ],
         ];
@@ -75,12 +77,21 @@ class WorkController extends Controller
     public function actionCreate()
     {
         $model = new Work();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        $modelFile = new WorkFile();
+        
+        if ($model->load(Yii::$app->request->post())){
+            $modelFile->textFile = UploadedFile::getInstance($modelFile, 'textFile');
+            if ($modelFile->upload()){
+                $model->filename = $modelFile->filename;
+            } else {
+                print_r($modelFile->errors); //TODO Переделать эту строку на Exeption;
+            }
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'modelFile' => $modelFile
             ]);
         }
     }
